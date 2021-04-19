@@ -1,4 +1,4 @@
-const monthlyTrades = require("./domain/monthlyTrades");
+const { monthlyTrades } = require("./domain/monthlyTrades");
 
 const main = () => {
   monthlyTrades();
