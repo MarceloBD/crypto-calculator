@@ -1,7 +1,14 @@
 const getTrades = require("../data/trades");
 const TRADES = getTrades.TRADES();
 const Csv = require("../data/csv");
-const { round, money, accumulated, moneySum, roundSum } = require("./utils");
+const {
+  round,
+  money,
+  accumulated,
+  moneySum,
+  roundSum,
+  coloredLog,
+} = require("./utils");
 
 const getAllValues = (trades) => {
   return trades.map((trade) => {
@@ -23,7 +30,7 @@ const getAllTaxesValues = (trades) => {
   });
 };
 
-const getAllTaxesQuantity = (trades) => {
+const getAllTaxesQuantities = (trades) => {
   return trades.map((trade) => {
     return trade.type === "buy" ? round(trade.tax) : 0;
   });
@@ -35,9 +42,9 @@ const getMeanPrice = (
   allValues,
   buyTaxesValues,
   allQuantities,
-  allTaxesQuantity
+  allTaxesQuantities
 ) => {
-  const buyTaxesQuantities = allTaxesQuantity.map((tax, idx) =>
+  const buyTaxesQuantities = allTaxesQuantities.map((tax, idx) =>
     TRADES[idx].type === "buy" ? tax : 0
   );
 
@@ -59,33 +66,39 @@ const getMeanPrice = (
   );
 };
 
+const getTotalSold = (trades) => {
+  return trades.reduce(
+    (acc, cur) => (cur.type === "sell" ? acc + cur.value : acc),
+    0
+  );
+};
+
+const getBuyTaxesValues = (trades) => {
+  return getAllTaxesValues(trades).map((tax, idx) =>
+    TRADES[idx].type === "buy" ? tax : 0
+  );
+};
+
 const monthlyTrades = () => {
   const csv = new Csv();
 
   const allTaxesValues = getAllTaxesValues(TRADES);
-  const allTaxesQuantity = getAllTaxesQuantity(TRADES);
+  const allTaxesQuantities = getAllTaxesQuantities(TRADES);
   const allQuantities = getAllQuantities(TRADES);
   const allValues = getAllValues(TRADES);
-
-  let totalSelling = 0;
-
-  const buyTaxesValues = allTaxesValues.map((tax, idx) =>
-    TRADES[idx].type === "buy" ? tax : 0
-  );
+  const totalSold = getTotalSold(TRADES);
+  const buyTaxesValues = getBuyTaxesValues(TRADES);
 
   csv.generate(
     TRADES.map((trade, idx) => {
-      if (trade.type === "sell") {
-        totalSelling += trade.value;
-      }
       return {
         Indice: idx,
         "Preço da moeda": trade.price,
 
         "Quantidade de cripto": trade.quantity,
-        "Taxa em quantidade de cripto": allTaxesQuantity[idx],
+        "Taxa em quantidade de cripto": allTaxesQuantities[idx],
         "Quantidade de cripto menos taxas":
-          trade.quantity - allTaxesQuantity[idx],
+          trade.quantity - allTaxesQuantities[idx],
 
         "Quantidade de cripto acumulada": accumulated(
           allQuantities,
@@ -93,7 +106,7 @@ const monthlyTrades = () => {
           roundSum
         ),
         "Taxa em quantidade acumulada": accumulated(
-          allTaxesQuantity,
+          allTaxesQuantities,
           idx,
           roundSum
         ),
@@ -103,7 +116,7 @@ const monthlyTrades = () => {
           roundSum
         )
           ? accumulated(allQuantities, idx, roundSum) -
-            accumulated(allTaxesQuantity, idx, roundSum)
+            accumulated(allTaxesQuantities, idx, roundSum)
           : 0,
 
         "Valor reais": trade.value,
@@ -126,7 +139,7 @@ const monthlyTrades = () => {
           allValues,
           buyTaxesValues,
           allQuantities,
-          allTaxesQuantity
+          allTaxesQuantities
         ),
 
         "Lucro de venda":
@@ -140,7 +153,7 @@ const monthlyTrades = () => {
                   allValues,
                   buyTaxesValues,
                   allQuantities,
-                  allTaxesQuantity
+                  allTaxesQuantities
                 )
             : "-",
 
@@ -155,7 +168,7 @@ const monthlyTrades = () => {
                     allValues,
                     buyTaxesValues,
                     allQuantities,
-                    allTaxesQuantity
+                    allTaxesQuantities
                   )) *
               0.15
             : "-",
@@ -164,7 +177,23 @@ const monthlyTrades = () => {
     })
   );
 
-  console.log(totalSelling);
+  process.stdout.write("Valor alienado (vendido) foi de: ");
+  coloredLog(totalSold);
+  if (totalSold > 35000) {
+    console.log(
+      "Você DEVE declarar Darf do mês devido ao valor de venda ser maior que 35 mil"
+    );
+  } else {
+    console.log(
+      "Você NÃO deve declarar Darf do mês devido ao valor de venda ser menor que 35 mil"
+    );
+  }
 };
 
-module.exports = { monthlyTrades, getAllValues, getAllQuantities };
+module.exports = {
+  monthlyTrades,
+  getAllValues,
+  getAllQuantities,
+  getAllTaxesValues,
+  getAllTaxesQuantities,
+};
