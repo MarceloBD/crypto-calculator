@@ -112,7 +112,7 @@ describe("MonthlyTrades", function () {
           tax: 8.75,
         },
       ];
-      const expected = [2.762448, 2.424552, 2.31192, 8.75];
+      const expected = [2.76, 2.42, 2.31, 8.75];
 
       const result = new Trades(trades).getAllTaxesValues();
       chai.expect(result).to.be.deep.equal(expected);
@@ -151,7 +151,7 @@ describe("MonthlyTrades", function () {
           tax: 8.75,
         },
       ];
-      const expected = [0.00002796, 0.00002454, 0.0000234, 0];
+      const expected = [0.00002796, 0.00002454, 0.0000234, '-'];
 
       const result = new Trades(trades).getAllTaxesQuantities();
       chai.expect(result).to.be.deep.equal(expected);
@@ -230,7 +230,7 @@ describe("MonthlyTrades", function () {
           tax: 8.75,
         },
       ];
-      const expected = [0.00002796, 0.00002454, 0.0000234, 0];
+      const expected = [0.00002796, 0.00002454, 0.0000234, '-'];
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
@@ -391,7 +391,7 @@ describe("MonthlyTrades", function () {
           tax: 8.75,
         },
       ];
-      const expected = [0.01115704, 0.02095031, 0.03028847, 0.00000002];
+      const expected = [0.01115704, 0.02095031, 0.03028847, 0];
 
 
       const tradesInstance = new Trades(trades);
@@ -601,7 +601,7 @@ describe("MonthlyTrades", function () {
       chai.expect(result).to.be.deep.equal(expected);
     });
 
-    it("should have value without tax accumulated", function () {
+    it("should have mean price", function () {
       const trades = [
         {
           type: "buy",
@@ -632,11 +632,12 @@ describe("MonthlyTrades", function () {
           tax: 8.75,
         },
       ];
-      const expected = [1102.31, 2069.88, 2992.49, 0];
+
+      const expected = [98799.50, 98799.49, 98799.64, 98799.64];
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
-      const result = tradesInstance.tradesObj.map((trade) => trade.valueWithoutTaxesAccumulated);
+      const result = tradesInstance.tradesObj.map((trade) => trade.meanPrice);
 
       chai.expect(result).to.be.deep.equal(expected);
     });

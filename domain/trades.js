@@ -15,22 +15,26 @@ module.exports = class Trades {
     this.tradesObj = this.trades.map((trade, idx) => ({
       ...trade,
       idx,
+      quantity: this.allQuantities[idx],
+      value: this.allValues[idx],
       taxQuantity: this.allTaxesQuantities[idx],
-      quantityWithoutTaxes: trade.quantity - this.allTaxesQuantities[idx],
+      quantityWithoutTaxes:
+        trade.quantity -
+        (this.allTaxesQuantities[idx] !== "-"
+          ? this.allTaxesQuantities[idx]
+          : 0),
       quantityAccumulated: accumulated(this.allQuantities, idx, roundSum),
       taxQuantityAccumulated: accumulated(
         this.allTaxesQuantities,
         idx,
         roundSum
+      ), 
+      quantityWithoutTaxesAccumulated: roundSum(
+        accumulated(this.allQuantities, idx, roundSum) && accumulated(this.allValues, idx, moneySum)
+          ? accumulated(this.allQuantities, idx, roundSum) -
+              accumulated(this.allTaxesQuantities, idx, roundSum)
+          : 0
       ),
-      quantityWithoutTaxesAccumulated: roundSum(accumulated(
-        this.allQuantities,
-        idx,
-        roundSum
-      )
-        ? accumulated(this.allQuantities, idx, roundSum) -
-          accumulated(this.allTaxesQuantities, idx, roundSum)
-        : 0),
       taxValue: moneySum(this.allTaxesValues[idx]),
       valueWithoutTaxes: trade.value - moneySum(this.allTaxesValues[idx]),
       valueAccumulated: accumulated(this.allValues, idx, moneySum),
@@ -39,23 +43,25 @@ module.exports = class Trades {
         accumulated(this.allValues, idx, moneySum) -
           accumulated(this.buyTaxesValues, idx, moneySum) >
         0
-          ? moneySum(accumulated(this.allValues, idx, moneySum) -
-            accumulated(this.buyTaxesValues, idx, moneySum))
+          ? moneySum(
+              accumulated(this.allValues, idx, moneySum) -
+                accumulated(this.buyTaxesValues, idx, moneySum)
+            )
           : 0,
       meanPrice: this.getMeanPrice(trade, idx),
-      sellGain: trade.type === "sell"
-      ? trade.value -
-        this.allTaxesValues[idx] -
-        trade.quantity * this.getMeanPrice(trade, idx - 1)
-      : "-",
-      governmentTax: trade.type === "sell"
-      ? (trade.value -
-          this.allTaxesValues[idx] -
-          trade.quantity *
-            this.getMeanPrice(trade, idx - 1)) *
-        0.15
-      : "-",
-
+      sellGain:
+        trade.type === "sell"
+          ? trade.value -
+            this.allTaxesValues[idx] -
+            trade.quantity * this.getMeanPrice(trade, idx - 1)
+          : "-",
+      governmentTax:
+        trade.type === "sell"
+          ? (trade.value -
+              this.allTaxesValues[idx] -
+              trade.quantity * this.getMeanPrice(trade, idx - 1)) *
+            0.15
+          : "-",
     }));
   }
 
@@ -74,14 +80,14 @@ module.exports = class Trades {
   getAllTaxesValues() {
     return this.trades.map((trade) => {
       return trade.type === "buy"
-        ? round(trade.price * trade.tax)
-        : round(trade.tax);
+        ? moneySum(trade.price * trade.tax)
+        : moneySum(trade.tax);
     });
   }
 
   getAllTaxesQuantities() {
     return this.trades.map((trade) => {
-      return trade.type === "buy" ? round(trade.tax) : 0;
+      return trade.type === "buy" ? trade.tax : "-";
     });
   }
 
