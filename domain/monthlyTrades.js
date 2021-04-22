@@ -3,12 +3,13 @@ const TRADES = getTrades.TRADES();
 const Csv = require("../data/csv");
 const { coloredLog } = require("./utils");
 const Trades = require("./trades");
+const chart = require("../data/charts");
 
 const monthlyTrades = () => {
   const csv = new Csv();
   const monthTrades = new Trades(TRADES);
   monthTrades.buildTrades();
-  
+
   csv.generate(
     monthTrades.tradesObj.map((trade) => {
       return {
@@ -21,7 +22,8 @@ const monthlyTrades = () => {
 
         "Quantidade de cripto acumulada": trade.quantityAccumulated,
         "Taxa em quantidade acumulada": trade.taxQuantityAccumulated,
-        "Quantidade de cripto menos taxas acumulada": trade.quantityWithoutTaxesAccumulated,
+        "Quantidade de cripto menos taxas acumulada":
+          trade.quantityWithoutTaxesAccumulated,
 
         "Valor reais": trade.value,
         "Taxa em reais": trade.taxValue,
@@ -29,16 +31,13 @@ const monthlyTrades = () => {
 
         "Valor reais acumulado": trade.valueAccumulated,
         "Taxa em reais acumulada": trade.taxValueAccumulated,
-        "Valor reais menos taxas acumulado":
-          trade.valueWithoutTaxesAccumulated,
+        "Valor reais menos taxas acumulado": trade.valueWithoutTaxesAccumulated,
 
         "Preco medio": trade.meanPrice,
 
-        "Lucro de venda":
-          trade.sellGain,
+        "Lucro de venda": trade.sellGain,
 
-        Imposto:
-          trade.governmentTax,
+        Imposto: trade.governmentTax,
         Tipo: trade.type === "buy" ? "Compra" : "Venda",
       };
     })
@@ -55,6 +54,8 @@ const monthlyTrades = () => {
       "Você NÃO deve declarar Darf do mês devido ao valor de venda ser menor que 35 mil"
     );
   }
+
+  chart(monthTrades.tradesObj);
 };
 
 module.exports = {
