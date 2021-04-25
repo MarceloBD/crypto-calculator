@@ -1,19 +1,20 @@
-const getTrades = require("../data/trades");
-const TRADES = getTrades.TRADES();
 const Csv = require("../data/csv");
 const { coloredLog } = require("./utils");
 const Trades = require("./trades");
 const chart = require("../data/charts");
+const xlsx = require("../data/xlsx")
 
 const monthlyTrades = () => {
   const csv = new Csv();
-  const monthTrades = new Trades(TRADES);
+  const monthTrades = new Trades(xlsx.readTrades());
   monthTrades.buildTrades();
 
   csv.generate(
     monthTrades.tradesObj.map((trade) => {
       return {
         Indice: trade.idx,
+        Data: trade.date,
+
         "Preço da moeda": trade.price,
 
         "Quantidade de cripto": trade.quantity,

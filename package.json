@@ -11,9 +11,11 @@
     "canvas": "^2.7.0",
     "chart.js": "^3.1.1",
     "d3": "^6.7.0",
+    "date-fns": "^2.21.1",
     "fast-csv": "^4.3.6",
     "fs": "^0.0.1-security",
-    "jsdom": "^16.5.3"
+    "jsdom": "^16.5.3",
+    "xlsx": "^0.16.9"
   },
   "devDependencies": {
     "chai": "^4.3.4",
