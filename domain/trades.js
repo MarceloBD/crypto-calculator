@@ -28,9 +28,10 @@ module.exports = class Trades {
         this.allTaxesQuantities,
         idx,
         roundSum
-      ), 
+      ),
       quantityWithoutTaxesAccumulated: roundSum(
-        accumulated(this.allQuantities, idx, roundSum) && accumulated(this.allValues, idx, moneySum)
+        accumulated(this.allQuantities, idx, roundSum) &&
+          accumulated(this.allValues, idx, moneySum)
           ? accumulated(this.allQuantities, idx, roundSum) -
               accumulated(this.allTaxesQuantities, idx, roundSum)
           : 0
@@ -50,17 +51,21 @@ module.exports = class Trades {
           : 0,
       meanPrice: this.getMeanPrice(trade, idx),
       sellGain:
-        trade.type === "sell" 
-          ? trade.value -
-            this.allTaxesValues[idx] -
-            trade.quantity * this.getMeanPrice(trade, idx)
+        trade.type === "sell"
+          ? moneySum(
+              trade.value -
+                this.allTaxesValues[idx] -
+                trade.quantity * this.getMeanPrice(trade, idx)
+            )
           : "-",
       governmentTax:
         trade.type === "sell"
-          ? (trade.value -
-              this.allTaxesValues[idx] -
-              trade.quantity * this.getMeanPrice(trade, idx)) *
-            0.15
+          ? moneySum(
+              (trade.value -
+                this.allTaxesValues[idx] -
+                trade.quantity * this.getMeanPrice(trade, idx)) *
+                0.15
+            )
           : "-",
     }));
   }
@@ -107,7 +112,7 @@ module.exports = class Trades {
     }
 
     return money(
-      (accumulated(this.allValues, index, moneySum)) /
+      accumulated(this.allValues, index, moneySum) /
         (accumulated(this.allQuantities, index, roundSum) -
           accumulated(buyTaxesQuantities, index, roundSum))
     );

@@ -655,5 +655,87 @@ describe("MonthlyTrades", function () {
 
       chai.expect(result).to.be.deep.equal(expected);
     });
+
+    it("should have sell gain", function () {
+      const trades = [
+        {
+          type: "buy",
+          value: 1105.07,
+          quantity: 0.011185,
+          price: 98800.0,
+          tax: 0.00002796,
+        },
+        {
+          type: "buy",
+          value: 969.99,
+          quantity: 0.00981781,
+          price: 98800.0,
+          tax: 0.00002454,
+        },
+        {
+          type: "buy",
+          value: 924.92,
+          quantity: 0.00936156,
+          price: 98800.0,
+          tax: 0.0000234,
+        },
+        {
+          type: "sell",
+          value: 3501.34,
+          quantity: 0.03028845,
+          price: 115600.0,
+          tax: 8.75,
+        },
+      ];
+
+      const expected = ["-", "-", "-", 492.61];
+
+      const tradesInstance = new Trades(trades);
+      tradesInstance.buildTrades();
+      const result = tradesInstance.tradesObj.map((trade) => trade.sellGain);
+
+      chai.expect(result).to.be.deep.equal(expected);
+    });
+
+    it("should have government tax", function () {
+      const trades = [
+        {
+          type: "buy",
+          value: 1105.07,
+          quantity: 0.011185,
+          price: 98800.0,
+          tax: 0.00002796,
+        },
+        {
+          type: "buy",
+          value: 969.99,
+          quantity: 0.00981781,
+          price: 98800.0,
+          tax: 0.00002454,
+        },
+        {
+          type: "buy",
+          value: 924.92,
+          quantity: 0.00936156,
+          price: 98800.0,
+          tax: 0.0000234,
+        },
+        {
+          type: "sell",
+          value: 3501.34,
+          quantity: 0.03028845,
+          price: 115600.0,
+          tax: 8.75,
+        },
+      ];
+
+      const expected = ["-", "-", "-", 73.89];
+
+      const tradesInstance = new Trades(trades);
+      tradesInstance.buildTrades();
+      const result = tradesInstance.tradesObj.map((trade) => trade.governmentTax);
+
+      chai.expect(result).to.be.deep.equal(expected);
+    });
   });
 });
