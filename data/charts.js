@@ -33,7 +33,7 @@ const meanPrice = (trades) => {
 
 const sells = (trades) => {
   const outputLocation = "./valueAccumulated.svg";
-  console.log(trades.map((t) => t.value));
+
   const canvas = createCanvas(400, 400, "svg");
   const labels = trades.map((trade) => trade.idx);
   const data = {

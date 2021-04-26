@@ -4,9 +4,20 @@ const Trades = require("./trades");
 const chart = require("../data/charts");
 const xlsx = require("../data/xlsx")
 
+const translateType = (type) => {
+  if (type === "buy") {
+    return "Compra";
+  }
+  if (type === "sell") {
+    return "Venda";
+  }
+  return;
+};
+
 const monthlyTrades = () => {
   const csv = new Csv();
-  const monthTrades = new Trades(xlsx.readTrades());
+
+  const monthTrades = new Trades(xlsx.readTrades().filter(row => row.coin === 'bitcoin'));
   monthTrades.buildTrades();
 
   csv.generate(
@@ -39,7 +50,7 @@ const monthlyTrades = () => {
         "Lucro de venda": trade.sellGain,
 
         Imposto: trade.governmentTax,
-        Tipo: trade.type === "buy" ? "Compra" : "Venda",
+        Tipo: translateType(trade.type),
       };
     })
   );

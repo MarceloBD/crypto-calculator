@@ -50,16 +50,16 @@ module.exports = class Trades {
           : 0,
       meanPrice: this.getMeanPrice(trade, idx),
       sellGain:
-        trade.type === "sell"
+        trade.type === "sell" 
           ? trade.value -
             this.allTaxesValues[idx] -
-            trade.quantity * this.getMeanPrice(trade, idx - 1)
+            trade.quantity * this.getMeanPrice(trade, idx)
           : "-",
       governmentTax:
         trade.type === "sell"
           ? (trade.value -
               this.allTaxesValues[idx] -
-              trade.quantity * this.getMeanPrice(trade, idx - 1)) *
+              trade.quantity * this.getMeanPrice(trade, idx)) *
             0.15
           : "-",
     }));
@@ -107,8 +107,7 @@ module.exports = class Trades {
     }
 
     return money(
-      (accumulated(this.allValues, index, moneySum) -
-        accumulated(this.buyTaxesValues, index, moneySum)) /
+      (accumulated(this.allValues, index, moneySum)) /
         (accumulated(this.allQuantities, index, roundSum) -
           accumulated(buyTaxesQuantities, index, roundSum))
     );

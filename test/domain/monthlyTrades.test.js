@@ -151,7 +151,7 @@ describe("MonthlyTrades", function () {
           tax: 8.75,
         },
       ];
-      const expected = [0.00002796, 0.00002454, 0.0000234, '-'];
+      const expected = [0.00002796, 0.00002454, 0.0000234, "-"];
 
       const result = new Trades(trades).getAllTaxesQuantities();
       chai.expect(result).to.be.deep.equal(expected);
@@ -230,7 +230,7 @@ describe("MonthlyTrades", function () {
           tax: 8.75,
         },
       ];
-      const expected = [0.00002796, 0.00002454, 0.0000234, '-'];
+      const expected = [0.00002796, 0.00002454, 0.0000234, "-"];
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
@@ -274,11 +274,12 @@ describe("MonthlyTrades", function () {
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
-      const result = tradesInstance.tradesObj.map((trade) => trade.quantityWithoutTaxes);
+      const result = tradesInstance.tradesObj.map(
+        (trade) => trade.quantityWithoutTaxes
+      );
 
       chai.expect(result).to.be.deep.equal(expected);
     });
-
 
     it("should have quantity accumulated", function () {
       const trades = [
@@ -315,7 +316,9 @@ describe("MonthlyTrades", function () {
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
-      const result = tradesInstance.tradesObj.map((trade) => trade.quantityAccumulated);
+      const result = tradesInstance.tradesObj.map(
+        (trade) => trade.quantityAccumulated
+      );
 
       chai.expect(result).to.be.deep.equal(expected);
     });
@@ -355,7 +358,9 @@ describe("MonthlyTrades", function () {
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
-      const result = tradesInstance.tradesObj.map((trade) => trade.taxQuantityAccumulated);
+      const result = tradesInstance.tradesObj.map(
+        (trade) => trade.taxQuantityAccumulated
+      );
 
       chai.expect(result).to.be.deep.equal(expected);
     });
@@ -393,10 +398,11 @@ describe("MonthlyTrades", function () {
       ];
       const expected = [0.01115704, 0.02095031, 0.03028847, 0];
 
-
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
-      const result = tradesInstance.tradesObj.map((trade) => trade.quantityWithoutTaxesAccumulated);
+      const result = tradesInstance.tradesObj.map(
+        (trade) => trade.quantityWithoutTaxesAccumulated
+      );
 
       chai.expect(result).to.be.deep.equal(expected);
     });
@@ -476,7 +482,9 @@ describe("MonthlyTrades", function () {
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
-      const result = tradesInstance.tradesObj.map((trade) => trade.valueWithoutTaxes);
+      const result = tradesInstance.tradesObj.map(
+        (trade) => trade.valueWithoutTaxes
+      );
 
       chai.expect(result).to.be.deep.equal(expected);
     });
@@ -516,7 +524,9 @@ describe("MonthlyTrades", function () {
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
-      const result = tradesInstance.tradesObj.map((trade) => trade.valueAccumulated);
+      const result = tradesInstance.tradesObj.map(
+        (trade) => trade.valueAccumulated
+      );
 
       chai.expect(result).to.be.deep.equal(expected);
     });
@@ -556,7 +566,9 @@ describe("MonthlyTrades", function () {
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
-      const result = tradesInstance.tradesObj.map((trade) => trade.taxValueAccumulated);
+      const result = tradesInstance.tradesObj.map(
+        (trade) => trade.taxValueAccumulated
+      );
 
       chai.expect(result).to.be.deep.equal(expected);
     });
@@ -596,7 +608,9 @@ describe("MonthlyTrades", function () {
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
-      const result = tradesInstance.tradesObj.map((trade) => trade.valueWithoutTaxesAccumulated);
+      const result = tradesInstance.tradesObj.map(
+        (trade) => trade.valueWithoutTaxesAccumulated
+      );
 
       chai.expect(result).to.be.deep.equal(expected);
     });
@@ -633,7 +647,7 @@ describe("MonthlyTrades", function () {
         },
       ];
 
-      const expected = [98799.50, 98799.49, 98799.64, 98799.64];
+      const expected = [99046.88, 99046.74, 99046.93, 99046.93];
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
