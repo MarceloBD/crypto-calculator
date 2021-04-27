@@ -2,7 +2,7 @@ const Csv = require("../data/csv");
 const { coloredLog } = require("./utils");
 const Trades = require("./trades");
 const chart = require("../data/charts");
-const xlsx = require("../data/xlsx")
+const xlsx = require("../data/xlsx");
 
 const translateType = (type) => {
   if (type === "buy") {
@@ -14,10 +14,11 @@ const translateType = (type) => {
   return;
 };
 
-const monthlyTrades = () => {
+const analyzeCoin = (input, coin) => {
+  console.info("Analisando: ", coin);
   const csv = new Csv();
 
-  const monthTrades = new Trades(xlsx.readTrades().filter(row => row.coin === 'bitcoin'));
+  const monthTrades = new Trades(input.filter((row) => row.coin === coin));
   monthTrades.buildTrades();
 
   csv.generate(
@@ -52,9 +53,18 @@ const monthlyTrades = () => {
         Imposto: trade.governmentTax,
         Tipo: translateType(trade.type),
       };
-    })
+    }),
+    coin
   );
+  chart(monthTrades.tradesObj, coin);
+};
 
+const monthlyTrades = () => {
+  const input = xlsx.readTrades();
+  new Set(input.map((row) => row.coin)).forEach((coin) =>
+    analyzeCoin(input, coin)
+  );
+  /*
   process.stdout.write("Valor alienado (vendido) foi de: ");
   coloredLog(monthTrades.totalSold);
   if (monthTrades.totalSold > 35000) {
@@ -66,8 +76,7 @@ const monthlyTrades = () => {
       "Você NÃO deve declarar Darf do mês devido ao valor de venda ser menor que 35 mil"
     );
   }
-
-  chart(monthTrades.tradesObj);
+  */
 };
 
 module.exports = {

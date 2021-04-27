@@ -50,24 +50,24 @@ module.exports = class Trades {
             )
           : 0,
       meanPrice: this.getMeanPrice(trade, idx),
-      sellGain:
-        trade.type === "sell"
-          ? moneySum(
-              trade.value -
-                this.allTaxesValues[idx] -
-                trade.quantity * this.getMeanPrice(trade, idx)
-            )
-          : "-",
+      sellGain: trade.type === "sell" ? this.getSellGain(trade, idx) : "-",
       governmentTax:
-        trade.type === "sell"
-          ? moneySum(
-              (trade.value -
-                this.allTaxesValues[idx] -
-                trade.quantity * this.getMeanPrice(trade, idx)) *
-                0.15
-            )
-          : "-",
+        trade.type === "sell" ? this.getGovernmentTax(trade, idx) : "-",
     }));
+  }
+
+  getSellGain(trade, idx) {
+    return moneySum(
+      trade.value -
+        this.allTaxesValues[idx] -
+        trade.quantity * this.getMeanPrice(trade, idx)
+    );
+  }
+
+  getGovernmentTax(trade, idx) {
+    return this.getSellGain(trade, idx) > 0
+      ? moneySum(this.getSellGain(trade, idx) * 0.15)
+      : 0;
   }
 
   getAllValues() {

@@ -4,8 +4,8 @@ const jsdom = require("jsdom");
 const { Chart } = require("chart.js");
 const { JSDOM } = jsdom;
 
-const meanPrice = (trades) => {
-  const outputLocation = "./meanPrice.svg";
+const meanPrice = (trades, coin) => {
+  const outputLocation = `./meanPrice_${coin}.svg`;
 
   const canvas = createCanvas(400, 400, "svg");
   const labels = trades.map((trade) => trade.idx);
@@ -31,8 +31,8 @@ const meanPrice = (trades) => {
   fs.writeFileSync(outputLocation, canvas.toBuffer());
 };
 
-const sells = (trades) => {
-  const outputLocation = "./valueAccumulated.svg";
+const sells = (trades, coin) => {
+  const outputLocation = `./valueAccumulated_${coin}.svg`;
 
   const canvas = createCanvas(400, 400, "svg");
   const labels = trades.map((trade) => trade.idx);
@@ -67,12 +67,12 @@ const sells = (trades) => {
   fs.writeFileSync(outputLocation, canvas.toBuffer());
 };
 
-const chart = (trades) => {
+const chart = (trades, coin) => {
   const fakeDom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`);
   global.window = fakeDom.window;
 
-  meanPrice(trades);
-  sells(trades);
+  meanPrice(trades, coin);
+  sells(trades, coin);
 };
 
 module.exports = chart;
