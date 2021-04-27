@@ -1,4 +1,4 @@
-const { round, money, accumulated, moneySum, roundSum } = require("./utils");
+const { accumulated, moneySum, roundSum } = require("./utils");
 
 module.exports = class Trades {
   constructor(trades) {
@@ -9,6 +9,7 @@ module.exports = class Trades {
     this.allValues = this.getAllValues(trades);
     this.totalSold = this.getTotalSold(trades);
     this.buyTaxesValues = this.getBuyTaxesValues(trades);
+    this.getAllMeanPrices(trades);
   }
 
   buildTrades() {
@@ -16,7 +17,6 @@ module.exports = class Trades {
       ...trade,
       idx,
       quantity: this.allQuantities[idx],
-      value: this.allValues[idx],
       taxQuantity: this.allTaxesQuantities[idx],
       quantityWithoutTaxes:
         trade.quantity -
@@ -49,7 +49,7 @@ module.exports = class Trades {
                 accumulated(this.buyTaxesValues, idx, moneySum)
             )
           : 0,
-      meanPrice: this.getMeanPrice(trade, idx),
+      meanPrice: this.allMeanPrices[idx],
       sellGain: trade.type === "sell" ? this.getSellGain(trade, idx) : "-",
       governmentTax:
         trade.type === "sell" ? this.getGovernmentTax(trade, idx) : "-",
@@ -60,7 +60,7 @@ module.exports = class Trades {
     return moneySum(
       trade.value -
         this.allTaxesValues[idx] -
-        trade.quantity * this.getMeanPrice(trade, idx)
+        trade.quantity * this.allMeanPrices[idx - 1]
     );
   }
 
@@ -96,26 +96,27 @@ module.exports = class Trades {
     });
   }
 
-  getMeanPrice(trade, idx) {
+  getAllMeanPrices(trades) {
     const buyTaxesQuantities = this.allTaxesQuantities.map((tax, idx) =>
       this.trades[idx].type === "buy" ? tax : 0
     );
+    this.allValues = [];
+    this.allMeanPrices = [];
 
-    let index = idx;
-
-    if (trade.type === "sell") {
-      const oldBuys = this.trades.filter(
-        (t, index) => idx > index && t.type === "buy"
+    trades.forEach((trade, idx) => {
+      this.allValues.push(
+        trade.type === "buy"
+          ? trade.value
+          : moneySum(-trade.quantity * this.allMeanPrices[idx - 1])
       );
-
-      index = this.trades.indexOf(oldBuys[oldBuys.length - 1]);
-    }
-
-    return money(
-      accumulated(this.allValues, index, moneySum) /
-        (accumulated(this.allQuantities, index, roundSum) -
-          accumulated(buyTaxesQuantities, index, roundSum))
-    );
+      this.allMeanPrices.push(
+        moneySum(
+          accumulated(this.allValues, idx) /
+            (accumulated(this.allQuantities, idx, roundSum) -
+              accumulated(buyTaxesQuantities, idx, roundSum))
+        )
+      );
+    });
   }
 
   getTotalSold() {

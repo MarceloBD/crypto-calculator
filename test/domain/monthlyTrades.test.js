@@ -647,7 +647,7 @@ describe("MonthlyTrades", function () {
         },
       ];
 
-      const expected = [99046.88, 99046.74, 99046.93, 99046.93];
+      const expected = [99046.88, 99046.74, 99046.93, 0];
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();

@@ -1,5 +1,4 @@
 const Csv = require("../data/csv");
-const { coloredLog } = require("./utils");
 const Trades = require("./trades");
 const chart = require("../data/charts");
 const xlsx = require("../data/xlsx");
@@ -42,11 +41,11 @@ const analyzeCoin = (input, coin) => {
         "Taxa em reais": trade.taxValue,
         "Valor reais menos taxas": trade.valueWithoutTaxes,
 
-        "Valor reais acumulado": trade.valueAccumulated,
+        "Saldo reais acumulado": trade.valueAccumulated,
         "Taxa em reais acumulada": trade.taxValueAccumulated,
-        "Valor reais menos taxas acumulado": trade.valueWithoutTaxesAccumulated,
+        "Saldo reais menos taxas acumulado": trade.valueWithoutTaxesAccumulated,
 
-        "Preco medio": trade.meanPrice,
+        "Preco medio": trade.meanPrice ? trade.meanPrice : "-",
 
         "Lucro de venda": trade.sellGain,
 
