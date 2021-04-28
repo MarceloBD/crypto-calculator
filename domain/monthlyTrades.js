@@ -47,6 +47,12 @@ const analyzeCoin = (input, coin) => {
 
         "Preco medio": trade.meanPrice ? trade.meanPrice : "-",
 
+        "Data (venda)": trade.type === 'sell' ? trade.date : '-',
+        "Quantidade (venda)": trade.type === 'sell' ? -trade.quantity : '-',
+        "Venda (bruto)": trade.type === 'sell' ? trade.value : '-',
+        "Taxa": trade.type === 'sell' ? trade.tax : '-',
+        "Compra (bruto)": trade.type === 'sell' ? trade.buyValue : '-',
+
         "Lucro de venda (liquido)": trade.sellGain,
 
         Imposto: trade.governmentTax,

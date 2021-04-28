@@ -50,6 +50,7 @@ module.exports = class Trades {
             )
           : 0,
       meanPrice: this.allMeanPrices[idx],
+      buyValue:  moneySum(trade.quantity * this.allMeanPrices[idx - 1]), 
       sellGain: trade.type === "sell" ? this.getSellGain(trade, idx) : "-",
       governmentTax:
         trade.type === "sell" ? this.getGovernmentTax(trade, idx) : "-",
