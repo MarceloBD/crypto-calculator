@@ -26,28 +26,28 @@ const analyzeCoin = (input, coin) => {
         Indice: trade.idx,
         Data: trade.date,
 
-        "Preço da moeda": trade.price,
+        "Preco da moeda": trade.price,
 
-        "Quantidade de cripto": trade.quantity,
+        "Quantidade de cripto (bruto)": trade.quantity,
         "Taxa em quantidade de cripto": trade.taxQuantity,
-        "Quantidade de cripto menos taxas": trade.quantityWithoutTaxes,
+        "Quantidade de cripto menos taxas (liquido)": trade.quantityWithoutTaxes,
 
-        "Quantidade de cripto acumulada": trade.quantityAccumulated,
+        "Valor reais (bruto)": trade.value,
+        "Taxa em reais": trade.taxValue,
+        "Valor reais menos taxas (liquido)": trade.valueWithoutTaxes,
+
+        "Saldo de cripto (bruto)": trade.quantityAccumulated,
         "Taxa em quantidade acumulada": trade.taxQuantityAccumulated,
-        "Quantidade de cripto menos taxas acumulada":
+        "Saldo de cripto menos taxas acumulada (liquido)":
           trade.quantityWithoutTaxesAccumulated,
 
-        "Valor reais": trade.value,
-        "Taxa em reais": trade.taxValue,
-        "Valor reais menos taxas": trade.valueWithoutTaxes,
-
-        "Saldo reais acumulado": trade.valueAccumulated,
+        "Saldo reais acumulado (bruto)": trade.valueAccumulated,
         "Taxa em reais acumulada": trade.taxValueAccumulated,
-        "Saldo reais menos taxas acumulado": trade.valueWithoutTaxesAccumulated,
+        "Saldo reais menos taxas acumulado (liquido)": trade.valueWithoutTaxesAccumulated,
 
         "Preco medio": trade.meanPrice ? trade.meanPrice : "-",
 
-        "Lucro de venda": trade.sellGain,
+        "Lucro de venda (liquido)": trade.sellGain,
 
         Imposto: trade.governmentTax,
         Tipo: translateType(trade.type),
@@ -57,6 +57,7 @@ const analyzeCoin = (input, coin) => {
   );
   chart(monthTrades.tradesObj, coin);
 };
+
 
 const monthlyTrades = () => {
   const input = xlsx.readTrades();

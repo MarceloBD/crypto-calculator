@@ -19,7 +19,7 @@ module.exports = class Trades {
       quantity: this.allQuantities[idx],
       taxQuantity: this.allTaxesQuantities[idx],
       quantityWithoutTaxes:
-        trade.quantity -
+        this.allQuantities[idx] -
         (this.allTaxesQuantities[idx] !== "-"
           ? this.allTaxesQuantities[idx]
           : 0),

@@ -270,7 +270,7 @@ describe("MonthlyTrades", function () {
           tax: 8.75,
         },
       ];
-      const expected = [0.01115704, 0.00979327, 0.00933816, 0.03028845];
+      const expected = [0.01115704, 0.00979327, 0.00933816, -0.03028845];
 
       const tradesInstance = new Trades(trades);
       tradesInstance.buildTrades();
