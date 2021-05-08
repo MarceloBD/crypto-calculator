@@ -43,8 +43,10 @@ const analyzeCoin = (input, coin) => {
 
         "Saldo reais acumulado (bruto)": trade.valueAccumulated,
         "Taxa em reais acumulada": trade.taxValueAccumulated,
-        "Saldo reais menos taxas acumulado (liquido)": trade.valueWithoutTaxesAccumulated,
-
+        // "Saldo reais menos taxas acumulado (liquido)": trade.valueWithoutTaxesAccumulated, 
+        // nao tem sentido. Pode ser usado para visualização de quanto se deixa
+        // para a corretora, porem deve ser calculador de outra forma.
+        // Talvez utilizando um preço medio liquido (sem taxas)
         "Preco medio": trade.meanPrice ? trade.meanPrice : "-",
 
         "Data (venda)": trade.type === 'sell' ? trade.date : '-',

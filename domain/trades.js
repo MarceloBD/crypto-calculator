@@ -6,7 +6,6 @@ module.exports = class Trades {
     this.allTaxesValues = this.getAllTaxesValues(trades);
     this.allTaxesQuantities = this.getAllTaxesQuantities(trades);
     this.allQuantities = this.getAllQuantities(trades);
-    this.allValues = this.getAllValues(trades);
     this.totalSold = this.getTotalSold(trades);
     this.buyTaxesValues = this.getBuyTaxesValues(trades);
     this.getAllMeanPrices(trades);
